@@ -1,0 +1,65 @@
+import arma.*
+import armadura.*
+import collarDivino.*
+import cotaDeMalla.*
+import fuerzaOscura.*
+import hechizoDeLogos.*
+import libroDeHechizosYEspejo.*
+import mascara.*
+import personaje.*
+
+describe "Pruebas Test 2" {
+	var rolando
+	var mascaraOscura
+	var espectroMalefico
+	var espadaDelDestino
+	var mascaraParaNadaOscura
+	
+	fixture{
+		mascaraOscura = new Mascara(1)
+		mascaraParaNadaOscura = new Mascara(0)
+		espectroMalefico = new HechizoDeLogos("Espectro Malefico",1)
+		espadaDelDestino = new Arma()
+		rolando = new Personaje(espectroMalefico,[espadaDelDestino,collarDivino,mascaraOscura])
+	}
+
+	test "Eliminar todos los artefactos de Rolando, luego conocer su habilidad para la lucha" {
+		rolando.artefactos().clear()
+		assert.equals(1,rolando.valorLucha())
+	}
+	
+	test "Conocer habilidad para la lucha de Rolando con todos los artefactos" {
+		assert.equals(13,rolando.valorLucha())
+	}
+	
+	test "Cambiar la cantidad de perlas del collar divino a 3, luego conocer la habilidad
+	para la lucha de Rolando"{
+		collarDivino.cantidadDePerlas(3)
+		assert.equals(11,rolando.valorLucha())
+	}
+	
+	test "Cambiar valor base de lucha de Rolando a 8, luego conocer su habilidad de lucha"{
+		rolando.valorBaseLucha(8)
+		assert.equals(20,rolando.valorLucha())
+	}
+	
+	test "Hacer que ocurra un eclipse, luego conocer el valor de lucha de la mascara oscura"{
+		fuerzaOscura.eclipse()
+		assert.equals(5,mascaraOscura.unidadesDeLucha(rolando))
+	}
+	
+	test "Eliminar la mascara oscura de los artefactos de Rolando, luego conocer su habilidad de lucha"{
+		rolando.removerArtefacto(mascaraOscura)
+		assert.equals(9,rolando.valorLucha())
+	}
+	
+	test "Preguntar por el valor de lucha de la mascaraParaNadaOscura de Rolando"{
+		assert.equals(4,mascaraParaNadaOscura.unidadesDeLucha(rolando))
+	}
+	
+	test "Preguntar por el valor de lucha de la máscaraParaNadaOscura con el nuevo valor minimo 2"{
+		mascaraParaNadaOscura.valorMinimo(2)
+		assert.equals(2,mascaraParaNadaOscura.unidadesDeLucha(rolando))
+	}
+	
+}
